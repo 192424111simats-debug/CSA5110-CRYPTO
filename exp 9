@@ -1,0 +1,47 @@
+# Playfair Cipher Decryption
+
+matrix = [
+    ['M','O','N','A','R'],
+    ['C','H','Y','B','D'],
+    ['E','F','G','I','K'],
+    ['L','P','Q','S','T'],
+    ['U','V','W','X','Z']
+]
+
+def find_pos(ch):
+    if ch == 'J':
+        ch = 'I'
+    for i in range(5):
+        for j in range(5):
+            if matrix[i][j] == ch:
+                return i, j
+
+def decrypt(cipher):
+    cipher = cipher.replace(" ", "").upper()
+    plain = ""
+
+    for i in range(0, len(cipher), 2):
+        a = cipher[i]
+        b = cipher[i+1]
+
+        r1, c1 = find_pos(a)
+        r2, c2 = find_pos(b)
+
+        if r1 == r2:      # Same row
+            plain += matrix[r1][(c1-1)%5]
+            plain += matrix[r2][(c2-1)%5]
+
+        elif c1 == c2:    # Same column
+            plain += matrix[(r1-1)%5][c1]
+            plain += matrix[(r2-1)%5][c2]
+
+        else:             # Rectangle
+            plain += matrix[r1][c2]
+            plain += matrix[r2][c1]
+
+    return plain
+
+cipher = input("Enter Cipher Text:\n")
+
+print("\nDecrypted Text:")
+print(decrypt(cipher))
