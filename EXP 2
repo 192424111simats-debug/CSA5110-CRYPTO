@@ -1,0 +1,28 @@
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+key = "QWERTYUIOPASDFGHJKLZXCVBNM"
+
+def encrypt(text):
+    result = ""
+    for ch in text.upper():
+        if ch in alphabet:
+            index = alphabet.index(ch)
+            result += key[index]
+        else:
+            result += ch
+    return result
+
+def decrypt(text):
+    result = ""
+    for ch in text.upper():
+        if ch in key:
+            index = key.index(ch)
+            result += alphabet[index]
+        else:
+            result += ch
+    return result
+
+plain = input("Enter Plain Text: ")
+
+cipher = encrypt(plain)
+print("Encrypted Text:", cipher)
+print("Decrypted Text:", decrypt(cipher))
