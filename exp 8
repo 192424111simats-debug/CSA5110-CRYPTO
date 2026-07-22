@@ -1,0 +1,44 @@
+# Keyword Monoalphabetic Cipher
+
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+keyword = "CIPHER"
+
+# Generate cipher alphabet
+cipher = ""
+
+for ch in keyword:
+    if ch not in cipher:
+        cipher += ch
+
+for ch in alphabet:
+    if ch not in cipher:
+        cipher += ch
+
+print("Plain Alphabet : ", alphabet)
+print("Cipher Alphabet:", cipher)
+
+# Encryption
+plain = input("\nEnter Plain Text: ").upper()
+
+encrypted = ""
+
+for ch in plain:
+    if ch.isalpha():
+        index = alphabet.index(ch)
+        encrypted += cipher[index]
+    else:
+        encrypted += ch
+
+print("Encrypted Text :", encrypted)
+
+# Decryption
+decrypted = ""
+
+for ch in encrypted:
+    if ch.isalpha():
+        index = cipher.index(ch)
+        decrypted += alphabet[index]
+    else:
+        decrypted += ch
+
+print("Decrypted Text :", decrypted)
