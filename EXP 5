@@ -1,0 +1,42 @@
+from math import gcd
+
+def mod_inverse(a):
+    for i in range(26):
+        if (a * i) % 26 == 1:
+            return i
+    return None
+
+def encrypt(text, a, b):
+    result = ""
+    for ch in text.upper():
+        if ch.isalpha():
+            p = ord(ch) - 65
+            c = (a * p + b) % 26
+            result += chr(c + 65)
+        else:
+            result += ch
+    return result
+
+def decrypt(text, a, b):
+    result = ""
+    inv = mod_inverse(a)
+
+    for ch in text.upper():
+        if ch.isalpha():
+            c = ord(ch) - 65
+            p = (inv * (c - b)) % 26
+            result += chr(p + 65)
+        else:
+            result += ch
+    return result
+
+plain = input("Enter Plain Text: ")
+a = int(input("Enter value of a: "))
+b = int(input("Enter value of b: "))
+
+if gcd(a, 26) != 1:
+    print("Invalid value of a. It must be coprime with 26.")
+else:
+    cipher = encrypt(plain, a, b)
+    print("Encrypted Text:", cipher)
+    print("Decrypted Text:", decrypt(cipher, a, b))
