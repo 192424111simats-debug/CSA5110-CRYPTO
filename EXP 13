@@ -1,0 +1,72 @@
+import numpy as np
+
+MOD = 26
+
+
+def matrix_inverse_mod(matrix):
+    a = int(matrix[0][0])
+    b = int(matrix[0][1])
+    c = int(matrix[1][0])
+    d = int(matrix[1][1])
+
+    determinant = (a * d - b * c) % MOD
+
+    inverse_det = None
+
+    for i in range(1, MOD):
+        if (determinant * i) % MOD == 1:
+            inverse_det = i
+            break
+
+    if inverse_det is None:
+        return None
+
+    inverse = np.array([
+        [d, -b],
+        [-c, a]
+    ])
+
+    return (inverse_det * inverse) % MOD
+
+
+def text_to_numbers(text):
+    return [ord(ch.upper()) - ord('A') for ch in text if ch.isalpha()]
+
+
+def pair_matrix(text):
+    nums = text_to_numbers(text)
+
+    if len(nums) % 2 != 0:
+        nums.append(23)  # X
+
+    return np.array([
+        nums[0:2],
+        nums[2:4]
+    ])
+
+
+# Known plaintext-ciphertext pairs
+plaintext = "HELP"
+ciphertext = "HIAT"
+
+P = pair_matrix(plaintext)
+C = pair_matrix(ciphertext)
+
+print("Plaintext Matrix:")
+print(P)
+
+print("\nCiphertext Matrix:")
+print(C)
+
+P_inv = matrix_inverse_mod(P)
+
+if P_inv is None:
+    print("\nCannot recover key.")
+else:
+    key = (C @ P_inv) % MOD
+
+    print("\nRecovered Hill Cipher Key:")
+    print(key)
+
+    print("\nVerification:")
+    print((key @ P) % MOD)
