@@ -1,0 +1,26 @@
+from Crypto.Cipher import DES3
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
+
+key = DES3.adjust_key_parity(get_random_bytes(24))
+iv = get_random_bytes(8)
+
+plaintext = input("Enter Plain Text: ").encode()
+
+cipher = DES3.new(key, DES3.MODE_CBC, iv)
+
+ciphertext = cipher.encrypt(pad(plaintext, 8))
+
+print("\nIV:", iv.hex())
+print("Key:", key.hex())
+print("Ciphertext:", ciphertext.hex())
+
+# Decryption
+decipher = DES3.new(key, DES3.MODE_CBC, iv)
+
+decrypted = unpad(
+    decipher.decrypt(ciphertext),
+    8
+)
+
+print("Decrypted Text:", decrypted.decode())
