@@ -1,0 +1,63 @@
+# DES Decryption Key Schedule Demonstration
+
+key = "133457799BBCDFF1"
+
+# Initial Permutation Choice 1
+PC1 = [
+    57,49,41,33,25,17,9,
+    1,58,50,42,34,26,18,
+    10,2,59,51,43,35,27,
+    19,11,3,60,52,44,36,
+    63,55,47,39,31,23,15,
+    7,62,54,46,38,30,22,
+    14,6,61,53,45,37,29,
+    21,13,5,28,20,12,4
+]
+
+# Left shifts
+shifts = [
+    1,1,2,2,2,2,2,2,
+    1,2,2,2,2,2,2,1
+]
+
+def hex_to_bin(hex_string):
+    return bin(int(hex_string, 16))[2:].zfill(len(hex_string) * 4)
+
+
+def permute(bits, table):
+    return ''.join(bits[i - 1] for i in table)
+
+
+def left_shift(bits, n):
+    return bits[n:] + bits[:n]
+
+
+key_binary = hex_to_bin(key)
+
+permuted = permute(key_binary, PC1)
+
+C = permuted[:28]
+D = permuted[28:]
+
+subkeys = []
+
+for shift in shifts:
+    C = left_shift(C, shift)
+    D = left_shift(D, shift)
+
+    subkey = C + D
+    subkeys.append(subkey)
+
+print("DES Encryption Subkeys")
+print("-----------------------")
+
+for i, subkey in enumerate(subkeys):
+    print("K" + str(i + 1) + ":", subkey)
+
+print("\nDES Decryption Order")
+print("--------------------")
+
+for i in range(15, -1, -1):
+    print("K" + str(i + 1), end=" ")
+
+print()
