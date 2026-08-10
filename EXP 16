@@ -1,0 +1,69 @@
+from collections import Counter
+
+english_frequency = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+ciphertext = input("Enter Cipher Text: ")
+
+n = int(input("How many possible plaintexts do you want? "))
+
+# Count ciphertext letters
+frequency = Counter(
+    ch for ch in ciphertext.upper()
+    if ch.isalpha()
+)
+
+# Sort ciphertext letters by frequency
+cipher_order = [
+    item[0]
+    for item in frequency.most_common()
+]
+
+# Complete alphabet
+for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+    if ch not in cipher_order:
+        cipher_order.append(ch)
+
+results = []
+
+# Try several frequency mappings
+for shift in range(10):
+
+    mapping = {}
+
+    for i, cipher_letter in enumerate(cipher_order):
+        plain_letter = english_frequency[(i + shift) % 26]
+        mapping[cipher_letter] = plain_letter
+
+    plaintext = ""
+
+    for ch in ciphertext.upper():
+        if ch.isalpha():
+            plaintext += mapping[ch]
+        else:
+            plaintext += ch
+
+    # Simple English word scoring
+    common_words = [
+        "THE", "OF", "AND", "TO", "IN",
+        "IS", "YOU", "THAT", "IT", "HE",
+        "WAS", "FOR", "ON", "ARE", "AS"
+    ]
+
+    score = 0
+
+    for word in common_words:
+        score += plaintext.count(word) * 10
+
+    results.append((score, plaintext))
+
+results.sort(reverse=True)
+
+print("\nTop", n, "Possible Plaintexts:")
+print("--------------------------------")
+
+for i in range(min(n, len(results))):
+    score, plaintext = results[i]
+
+    print("\nRank:", i + 1)
+    print("Score:", score)
+    print("Plaintext:", plaintext)
