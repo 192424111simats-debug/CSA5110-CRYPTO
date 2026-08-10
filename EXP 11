@@ -1,0 +1,22 @@
+import math
+
+# Number of possible Playfair keys
+possible_keys = math.factorial(25)
+
+# Effectively unique keys
+unique_keys = possible_keys // 25
+
+# Approximate powers of 2
+power_possible = math.log2(possible_keys)
+power_unique = math.log2(unique_keys)
+
+print("Playfair Cipher Key Analysis")
+print("--------------------------------")
+
+print("Possible keys = 25!")
+print("Possible keys =", possible_keys)
+print("Approximately 2^%.2f" % power_possible)
+
+print("\nEffectively unique keys = 25! / 25")
+print("Effectively unique keys =", unique_keys)
+print("Approximately 2^%.2f" % power_unique)
