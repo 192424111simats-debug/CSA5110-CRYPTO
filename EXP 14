@@ -1,0 +1,44 @@
+def encrypt(plaintext, key):
+    plaintext = ''.join(ch for ch in plaintext.lower() if ch.isalpha())
+
+    ciphertext = ""
+
+    for i in range(len(plaintext)):
+        p = ord(plaintext[i]) - ord('a')
+        c = (p + key[i]) % 26
+        ciphertext += chr(c + ord('a'))
+
+    return ciphertext
+
+
+def find_key(ciphertext, plaintext):
+    key = []
+
+    for c, p in zip(ciphertext, plaintext):
+        c_value = ord(c) - ord('a')
+        p_value = ord(p) - ord('a')
+
+        k = (c_value - p_value) % 26
+        key.append(k)
+
+    return key
+
+
+plaintext = "send more money"
+
+key = [9, 0, 1, 7, 23, 15, 21, 14, 11, 11, 2, 8, 9]
+
+ciphertext = encrypt(plaintext, key)
+
+print("Plaintext :", ''.join(ch for ch in plaintext if ch.isalpha()))
+print("Key       :", key)
+print("Ciphertext:", ciphertext)
+
+# Part (b)
+new_plaintext = "cash not needed"
+new_plaintext = ''.join(ch for ch in new_plaintext.lower() if ch.isalpha())
+
+new_key = find_key(ciphertext, new_plaintext)
+
+print("\nNew Plaintext :", new_plaintext)
+print("Required Key  :", new_key)
