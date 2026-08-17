@@ -1,0 +1,19 @@
+def pad_message(text, block_size=8):
+    data = text.encode()
+
+    # Always add padding
+    padding = block_size - (len(data) % block_size)
+
+    if padding == 0:
+        padding = block_size
+
+    return data + b'\x80' + b'\x00' * (padding - 1)
+
+
+text = input("Enter Plain Text: ")
+
+padded = pad_message(text)
+
+print("\nOriginal Length:", len(text.encode()), "bytes")
+print("Padded Length:", len(padded), "bytes")
+print("Padded Data:", padded)
