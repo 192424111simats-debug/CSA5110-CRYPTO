@@ -1,0 +1,28 @@
+import math
+
+n = 3599
+e = 31
+
+p = 0
+q = 0
+
+# Find p and q
+for i in range(2, int(math.sqrt(n)) + 1):
+    if n % i == 0:
+        p = i
+        q = n // i
+        break
+
+print("p =", p)
+print("q =", q)
+
+# Euler phi
+phi = (p - 1) * (q - 1)
+
+print("phi(n) =", phi)
+
+# Find private key d
+d = pow(e, -1, phi)
+
+print("Public Key  = (", e, ",", n, ")")
+print("Private Key = (", d, ",", n, ")")
