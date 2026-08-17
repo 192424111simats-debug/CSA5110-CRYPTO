@@ -1,0 +1,16 @@
+import math
+
+n = int(input("Enter n: "))
+m = int(input("Enter plaintext block: "))
+
+g = math.gcd(m, n)
+
+print("\ngcd(M, n) =", g)
+
+if g == 1:
+    print("No useful common factor found.")
+else:
+    print("Common factor found!")
+    print("Factor of n =", g)
+    print("Other factor =", n // g)
+    print("RSA modulus can be factored.")
