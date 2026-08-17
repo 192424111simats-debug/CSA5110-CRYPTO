@@ -1,0 +1,41 @@
+def xor(a, b):
+    return ''.join('1' if x != y else '0'
+                   for x, y in zip(a, b))
+
+
+def simple_encrypt(block, key):
+    # Simple S-DES style demonstration
+    return xor(block, key)
+
+
+def simple_decrypt(block, key):
+    return xor(block, key)
+
+
+plaintext = input("Enter 16-bit Plaintext: ")
+key = input("Enter 8-bit Key: ")
+iv = input("Enter 8-bit IV: ")
+
+# Split plaintext into two 8-bit blocks
+p1 = plaintext[:8]
+p2 = plaintext[8:16]
+
+# CBC encryption
+x1 = xor(p1, iv)
+c1 = simple_encrypt(x1, key)
+
+x2 = xor(p2, c1)
+c2 = simple_encrypt(x2, key)
+
+ciphertext = c1 + c2
+
+print("\nCiphertext:", ciphertext)
+
+# CBC decryption
+d1 = simple_decrypt(c1, key)
+r1 = xor(d1, iv)
+
+d2 = simple_decrypt(c2, key)
+r2 = xor(d2, c1)
+
+print("Decrypted:", r1 + r2)
