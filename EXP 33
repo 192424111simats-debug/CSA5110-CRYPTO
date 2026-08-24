@@ -1,0 +1,27 @@
+!pip -q install pycryptodome
+
+from Crypto.Cipher import DES
+from Crypto.Util.Padding import pad, unpad
+
+key_text = input("Enter 8-character key: ")
+message = input("Enter plaintext: ")
+
+key = key_text.encode()
+
+if len(key) != 8:
+    print("Key must contain exactly 8 characters.")
+else:
+    cipher = DES.new(key, DES.MODE_ECB)
+
+    encrypted = cipher.encrypt(pad(message.encode(), 8))
+
+    print("\nCiphertext:", encrypted.hex())
+
+    decipher = DES.new(key, DES.MODE_ECB)
+
+    decrypted = unpad(
+        decipher.decrypt(encrypted),
+        8
+    )
+
+    print("Decrypted:", decrypted.decode())
