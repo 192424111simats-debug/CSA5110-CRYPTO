@@ -1,0 +1,109 @@
+from collections import Counter
+
+common_patterns = {
+    "THE": 10,
+    "AND": 8,
+    "ING": 7,
+    "ION": 6,
+    "TH": 5,
+    "HE": 5,
+    "IN": 4,
+    "ER": 4,
+    "AN": 4,
+    "RE": 4,
+    "ON": 4,
+    "AT": 3,
+    "EN": 3,
+    "ND": 3,
+    "TI": 3,
+    "ES": 3,
+    "OR": 3,
+    "TE": 3,
+    "OF": 3,
+    "TO": 3
+}
+
+english_order = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+
+def score_text(text):
+
+    score = 0
+
+    for pattern, value in common_patterns.items():
+        score += text.count(pattern) * value
+
+    return score
+
+
+ciphertext = input("Enter Cipher Text: ")
+
+n = int(
+    input("Enter number of possible plaintexts: ")
+)
+
+frequency = Counter(
+    ch for ch in ciphertext.upper()
+    if ch.isalpha()
+)
+
+cipher_order = [
+    x[0] for x in frequency.most_common()
+]
+
+for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+
+    if ch not in cipher_order:
+        cipher_order.append(ch)
+
+
+results = []
+
+
+for shift in range(26):
+
+    mapping = {}
+
+    for i in range(26):
+
+        cipher_letter = cipher_order[i]
+
+        plain_letter = english_order[
+            (i + shift) % 26
+        ]
+
+        mapping[cipher_letter] = plain_letter
+
+
+    plaintext = ""
+
+    for ch in ciphertext.upper():
+
+        if ch.isalpha():
+            plaintext += mapping[ch]
+
+        else:
+            plaintext += ch
+
+
+    score = score_text(plaintext)
+
+    results.append(
+        (score, plaintext)
+    )
+
+
+results.sort(
+    key=lambda x: x[0],
+    reverse=True
+)
+
+
+print("\nTop", n, "Possible Plaintexts")
+print("--------------------------------")
+
+for i in range(min(n, len(results))):
+
+    print("\nRank:", i + 1)
+    print("Score:", results[i][0])
+    print("Plaintext:", results[i][1])
