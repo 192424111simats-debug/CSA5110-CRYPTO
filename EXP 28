@@ -1,0 +1,24 @@
+q = int(input("Enter prime q: "))
+a = int(input("Enter public number a: "))
+
+x = int(input("Enter Alice's secret x: "))
+y = int(input("Enter Bob's secret y: "))
+
+# Values exchanged
+A = pow(a, x, q)
+B = pow(a, y, q)
+
+print("\nAlice sends:", A)
+print("Bob sends:", B)
+
+# Shared keys
+alice_key = pow(B, x, q)
+bob_key = pow(A, y, q)
+
+print("\nAlice's shared key:", alice_key)
+print("Bob's shared key:", bob_key)
+
+if alice_key == bob_key:
+    print("Key agreement successful!")
+else:
+    print("Key agreement failed!")
