@@ -1,0 +1,27 @@
+rate = 1024
+lane_size = 64
+total_lanes = 25
+
+message_lanes = rate // lane_size
+capacity_lanes = total_lanes - message_lanes
+
+print("SHA-3 Lane Analysis")
+print("-------------------")
+
+print("Block size:", rate, "bits")
+print("Lane size:", lane_size, "bits")
+print("Total lanes:", total_lanes)
+print("Message lanes:", message_lanes)
+print("Capacity lanes:", capacity_lanes)
+
+print("\nInitial state:")
+
+for i in range(total_lanes):
+    if i < message_lanes:
+        print("Lane", i, ": NONZERO")
+    else:
+        print("Lane", i, ": ZERO")
+
+print("\nIgnoring the permutation:")
+print("Capacity lanes remain ZERO.")
+print("Therefore, they never become nonzero.")
