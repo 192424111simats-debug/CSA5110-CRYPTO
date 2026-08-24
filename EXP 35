@@ -1,0 +1,37 @@
+def encrypt(plaintext, key):
+    plaintext = ''.join(
+        ch.lower() for ch in plaintext if ch.isalpha()
+    )
+
+    if len(key) != len(plaintext):
+        print("Error: Key length must equal plaintext length.")
+        return
+
+    ciphertext = ""
+
+    for i in range(len(plaintext)):
+        p = ord(plaintext[i]) - ord('a')
+        c = (p + key[i]) % 26
+
+        ciphertext += chr(c + ord('a'))
+
+    return ciphertext
+
+
+plaintext = input("Enter plaintext: ")
+
+key_input = input(
+    "Enter key values separated by spaces: "
+)
+
+key = list(map(int, key_input.split()))
+
+ciphertext = encrypt(plaintext, key)
+
+if ciphertext:
+    print("\nPlaintext :", ''.join(
+        ch.lower() for ch in plaintext if ch.isalpha()
+    ))
+
+    print("Key       :", key)
+    print("Ciphertext:", ciphertext)
