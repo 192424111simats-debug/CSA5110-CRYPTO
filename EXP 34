@@ -1,0 +1,29 @@
+def pad_bits(message, block_size):
+    bits = ""
+
+    for ch in message:
+        bits += format(ord(ch), "08b")
+
+    padding = block_size - (len(bits) % block_size)
+
+    if padding == 0:
+        padding = block_size
+
+    bits += "1"
+    bits += "0" * (padding - 1)
+
+    return bits
+
+
+message = input("Enter message: ")
+block_size = int(input("Enter block size: "))
+
+padded = pad_bits(message, block_size)
+
+print("\nOriginal bits:")
+print(''.join(format(ord(c), '08b') for c in message))
+
+print("\nPadded bits:")
+print(padded)
+
+print("\nTotal bits:", len(padded))
