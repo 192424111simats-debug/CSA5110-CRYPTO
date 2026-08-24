@@ -1,0 +1,17 @@
+n = int(input("Enter RSA modulus n: "))
+e = int(input("Enter public exponent e: "))
+message = input("Enter message: ").upper()
+
+print("\nEncrypted blocks:")
+
+ciphertext = []
+
+for ch in message:
+    if ch.isalpha():
+        m = ord(ch) - ord('A')
+        c = pow(m, e, n)
+        ciphertext.append(c)
+        print(ch, "->", m, "->", c)
+
+print("\nCiphertext:")
+print(ciphertext)
