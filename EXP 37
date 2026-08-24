@@ -1,0 +1,45 @@
+import math
+
+def affine_encrypt(text, a, b):
+    result = ""
+
+    for ch in text.upper():
+        if ch.isalpha():
+            p = ord(ch) - ord('A')
+            c = (a * p + b) % 26
+            result += chr(c + ord('A'))
+        else:
+            result += ch
+
+    return result
+
+
+def affine_decrypt(text, a, b):
+    result = ""
+
+    inverse = pow(a, -1, 26)
+
+    for ch in text.upper():
+        if ch.isalpha():
+            c = ord(ch) - ord('A')
+            p = (inverse * (c - b)) % 26
+            result += chr(p + ord('A'))
+        else:
+            result += ch
+
+    return result
+
+
+a = int(input("Enter value of a: "))
+b = int(input("Enter value of b: "))
+plaintext = input("Enter Plain Text: ")
+
+if math.gcd(a, 26) != 1:
+    print("\nInvalid value of a.")
+    print("a must be relatively prime to 26.")
+else:
+    ciphertext = affine_encrypt(plaintext, a, b)
+    decrypted = affine_decrypt(ciphertext, a, b)
+
+    print("\nCiphertext:", ciphertext)
+    print("Decrypted :", decrypted)
