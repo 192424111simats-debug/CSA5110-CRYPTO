@@ -1,0 +1,52 @@
+import hashlib
+import random
+
+def dsa_demo(message):
+    # Small educational values
+    q = 101
+
+    # Hash message
+    h = int(hashlib.sha256(message.encode()).hexdigest(), 16) % q
+
+    # Private key
+    x = 17
+
+    # Generator
+    g = 2
+
+    # Public key
+    y = pow(g, x, q)
+
+    # Generate a new random k
+    k = random.randint(1, q - 1)
+
+    r = pow(g, k, q) % q
+
+    k_inverse = pow(k, -1, q)
+
+    s = (k_inverse * (h + x * r)) % q
+
+    return r, s, k
+
+
+message = input("Enter message: ")
+
+r1, s1, k1 = dsa_demo(message)
+r2, s2, k2 = dsa_demo(message)
+
+print("\nFirst Signature")
+print("k =", k1)
+print("r =", r1)
+print("s =", s1)
+
+print("\nSecond Signature")
+print("k =", k2)
+print("r =", r2)
+print("s =", s2)
+
+print("\nSame message:", message)
+
+if (r1, s1) != (r2, s2):
+    print("Signatures are different.")
+else:
+    print("Signatures are same.")
