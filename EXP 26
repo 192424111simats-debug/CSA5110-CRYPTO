@@ -1,0 +1,17 @@
+import math
+
+n = int(input("Enter RSA modulus n: "))
+
+old_e = int(input("Enter leaked public key e: "))
+new_e = int(input("Enter new public key e: "))
+
+print("\nRSA Modulus:", n)
+print("Old Public Key:", old_e)
+print("New Public Key:", new_e)
+
+if math.gcd(old_e, new_e) != 1:
+    print("\nThe keys are not relatively prime.")
+else:
+    print("\nGenerating a new e and d with the SAME n is NOT safe.")
+    print("The old private key leak compromises the RSA modulus.")
+    print("A new modulus should be generated.")
