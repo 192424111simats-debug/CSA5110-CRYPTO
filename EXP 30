@@ -1,0 +1,31 @@
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+
+key = get_random_bytes(16)
+
+X = b"1234567890ABCDEF"
+
+cipher = AES.new(key, AES.MODE_ECB)
+
+# MAC of one-block message
+T = cipher.encrypt(X)
+
+# Second block = X XOR T
+second_block = bytes(a ^ b for a, b in zip(X, T))
+
+# CBC-MAC for X || (X XOR T)
+C1 = cipher.encrypt(X)
+
+C2_input = bytes(a ^ b for a, b in zip(second_block, C1))
+
+C2 = cipher.encrypt(C2_input)
+
+print("X       :", X.hex())
+print("T       :", T.hex())
+print("X XOR T :", second_block.hex())
+
+print("\nCBC-MAC of X:", T.hex())
+print("CBC-MAC of X || (X XOR T):", C2.hex())
+
+if T == C2:
+    print("\nForgery successful: both MACs are equal.")
