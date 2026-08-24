@@ -1,0 +1,74 @@
+import numpy as np
+
+MOD = 26
+
+
+def inverse_matrix(matrix):
+    a = int(matrix[0][0])
+    b = int(matrix[0][1])
+    c = int(matrix[1][0])
+    d = int(matrix[1][1])
+
+    determinant = (a * d - b * c) % MOD
+
+    inverse_det = None
+
+    for i in range(1, MOD):
+        if (determinant * i) % MOD == 1:
+            inverse_det = i
+            break
+
+    if inverse_det is None:
+        return None
+
+    inverse = np.array([
+        [d, -b],
+        [-c, a]
+    ])
+
+    return (inverse_det * inverse) % MOD
+
+
+def convert(text):
+    numbers = [
+        ord(ch.upper()) - ord('A')
+        for ch in text if ch.isalpha()
+    ]
+
+    return numbers
+
+
+plaintext = input("Enter 4-letter known plaintext: ")
+ciphertext = input("Enter corresponding 4-letter ciphertext: ")
+
+p = convert(plaintext)
+c = convert(ciphertext)
+
+P = np.array([
+    [p[0], p[2]],
+    [p[1], p[3]]
+])
+
+C = np.array([
+    [c[0], c[2]],
+    [c[1], c[3]]
+])
+
+print("\nPlaintext Matrix:")
+print(P)
+
+print("\nCiphertext Matrix:")
+print(C)
+
+P_inverse = inverse_matrix(P)
+
+if P_inverse is None:
+    print("\nCannot recover the key.")
+else:
+    key = (C @ P_inverse) % MOD
+
+    print("\nRecovered Hill Cipher Key:")
+    print(key)
+
+    print("\nVerification:")
+    print((key @ P) % MOD)
