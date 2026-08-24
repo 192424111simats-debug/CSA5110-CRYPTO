@@ -1,0 +1,43 @@
+def left_shift(block, bits):
+    return (block << bits) & ((1 << bits) - 1)
+
+
+def generate_subkeys(L, block_size):
+    if block_size == 64:
+        Rb = 0x1B
+    elif block_size == 128:
+        Rb = 0x87
+    else:
+        print("Unsupported block size")
+        return
+
+    msb_mask = 1 << (block_size - 1)
+
+    # K1
+    K1 = left_shift(L, 1)
+
+    if L & msb_mask:
+        K1 ^= Rb
+
+    # K2
+    K2 = left_shift(K1, 1)
+
+    if K1 & msb_mask:
+        K2 ^= Rb
+
+    return K1, K2, Rb
+
+
+block_size = int(input("Enter block size (64 or 128): "))
+L_hex = input("Enter L in hexadecimal: ")
+
+L = int(L_hex, 16)
+
+K1, K2, Rb = generate_subkeys(L, block_size)
+
+digits = block_size // 4
+
+print("\nRb =", hex(Rb))
+print("L  =", format(L, "0" + str(digits) + "X"))
+print("K1 =", format(K1, "0" + str(digits) + "X"))
+print("K2 =", format(K2, "0" + str(digits) + "X"))
