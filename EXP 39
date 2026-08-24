@@ -1,0 +1,91 @@
+from collections import Counter
+
+english_frequency = [
+    8.167, 1.492, 2.782, 4.253, 12.702, 2.228,
+    2.015, 6.094, 6.966, 0.153, 0.772, 4.025,
+    2.406, 6.749, 7.507, 1.929, 0.095, 5.987,
+    6.327, 9.056, 2.758, 0.978, 2.360, 0.150,
+    1.974, 0.074
+]
+
+
+def decrypt(ciphertext, key):
+    result = ""
+
+    for ch in ciphertext.upper():
+
+        if ch.isalpha():
+            c = ord(ch) - ord('A')
+            p = (c - key) % 26
+
+            result += chr(p + ord('A'))
+
+        else:
+            result += ch
+
+    return result
+
+
+def score(text):
+
+    letters = [
+        ch for ch in text.upper()
+        if ch.isalpha()
+    ]
+
+    total = len(letters)
+
+    if total == 0:
+        return float("inf")
+
+    count = Counter(letters)
+
+    value = 0
+
+    for i in range(26):
+
+        letter = chr(ord('A') + i)
+
+        observed = count[letter]
+
+        expected = (
+            english_frequency[i] / 100
+        ) * total
+
+        if expected > 0:
+            value += (
+                (observed - expected) ** 2
+            ) / expected
+
+    return value
+
+
+ciphertext = input("Enter Cipher Text: ")
+n = int(input("Enter number of possible plaintexts: "))
+
+results = []
+
+for key in range(26):
+
+    plaintext = decrypt(ciphertext, key)
+
+    s = score(plaintext)
+
+    results.append(
+        (s, key, plaintext)
+    )
+
+
+results.sort()
+
+print("\nTop", n, "Possible Plaintexts")
+print("--------------------------------")
+
+for i in range(min(n, 26)):
+
+    s, key, plaintext = results[i]
+
+    print("\nRank:", i + 1)
+    print("Key:", key)
+    print("Score:", round(s, 2))
+    print("Plaintext:", plaintext)
